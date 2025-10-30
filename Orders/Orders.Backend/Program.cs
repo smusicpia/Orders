@@ -1,4 +1,6 @@
 
+using System.Text.Json.Serialization;
+
 using Microsoft.EntityFrameworkCore;
 
 using Orders.Backend.Data;
@@ -11,14 +13,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=LocalConnection"));
 
-builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
+
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IStatesRepository, StatesRepository>();
+
+builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnionOfWork>();
+builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
+
 builder.Services.AddTransient<SeedDb>();
 
 var app = builder.Build();
