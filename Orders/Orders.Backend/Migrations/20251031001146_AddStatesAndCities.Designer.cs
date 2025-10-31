@@ -11,7 +11,7 @@ using Orders.Backend.Data;
 namespace Orders.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251028163244_AddStatesAndCities")]
+    [Migration("20251031001146_AddStatesAndCities")]
     partial class AddStatesAndCities
     {
         /// <inheritdoc />
@@ -53,6 +53,9 @@ namespace Orders.Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CityId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -62,6 +65,8 @@ namespace Orders.Backend.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("StateId", "Name")
                         .IsUnique();
@@ -116,6 +121,11 @@ namespace Orders.Backend.Migrations
 
             modelBuilder.Entity("Orders.Shared.Entities.City", b =>
                 {
+                    b.HasOne("Orders.Shared.Entities.City", null)
+                        .WithMany("Cities")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Orders.Shared.Entities.State", "State")
                         .WithMany("Cities")
                         .HasForeignKey("StateId")
@@ -134,6 +144,11 @@ namespace Orders.Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Orders.Shared.Entities.City", b =>
+                {
+                    b.Navigation("Cities");
                 });
 
             modelBuilder.Entity("Orders.Shared.Entities.Country", b =>

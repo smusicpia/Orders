@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 using Orders.Shared.Interfaces;
 
@@ -19,5 +14,9 @@ public class City : IEntityWithName
     public string Name { get; set; } = null!;
 
     public int StateId { get; set; }
-    public State? State { get; set; }
+    public State? State { get; set; } = null!;
+
+    public ICollection<City>? Cities { get; set; }
+
+    public int CitiesNumber => Cities == null || Cities.Count == 0 ? 0 : Cities.Count;
 }
