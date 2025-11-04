@@ -17,7 +17,7 @@ public partial class StateDetails
     private List<City>? cities;
 
     private MudTable<City> table = new();
-    private readonly int[] pageSizeOptions = { 10, 25, 50, 5, int.MaxValue };
+    private readonly int[] pageSizeOptions = { 10, 25, 50, int.MaxValue };
     private int totalRecords = 0;
     private bool loading;
     private const string baseUrl = "api/cities";
