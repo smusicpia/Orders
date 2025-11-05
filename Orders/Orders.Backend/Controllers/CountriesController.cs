@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +14,7 @@ namespace Orders.Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CountriesController : GenericController<Country>
 {
     private readonly ICountriesUnitOfWork _countriesUnitOfWork;
