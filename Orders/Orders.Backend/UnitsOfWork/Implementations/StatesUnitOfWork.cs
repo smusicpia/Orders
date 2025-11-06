@@ -22,4 +22,5 @@ public class StatesUnitOfWork : GenericUnitOfWork<State>, IStatesUnitOfWork
     public override async Task<ActionResponse<IEnumerable<State>>> GetAsync() => await _statesRepository.GetAsync();
 
     public override async Task<ActionResponse<State>> GetAsync(int id) => await _statesRepository.GetAsync(id);
+    public async Task<IEnumerable<State>> GetComboAsync(int countryId) => await _statesRepository.GetComboAsync(countryId);
 }
