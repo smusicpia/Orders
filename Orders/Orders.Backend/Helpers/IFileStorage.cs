@@ -2,17 +2,17 @@
 
 public interface IFileStorage
 {
-    Task<string> SaveFileAsync(byte[] content, string extention, string containerName);
+    Task<string> SaveFileAsync(byte[] content, string extention);
 
-    Task RemoveFileAsync(string path, string containerName);
+    Task RemoveFileAsync(string path);
 
-    async Task<string> EditFileAsync(byte[] content, string extention, string containerName, string path)
+    async Task<string> EditFileAsync(byte[] content, string extention, string path)
     {
         if (path is not null)
         {
-            await RemoveFileAsync(path, containerName);
+            await RemoveFileAsync(path);
         }
 
-        return await SaveFileAsync(content, extention, containerName);
+        return await SaveFileAsync(content, extention);
     }
 }

@@ -47,6 +47,6 @@ public partial class AuthLinks
     private void ShowModalRegister()
     {
         var closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        DialogService.ShowAsync<Registrer>("Registar Usuario", closeOnEscapeKey);
+        DialogService.ShowAsync<Register>("Registar Usuario", closeOnEscapeKey);
     }
 }

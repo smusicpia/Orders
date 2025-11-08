@@ -19,14 +19,12 @@ public class AccountsController : ControllerBase
     private readonly IUsersUnitOfWork _usersUnitOfWork;
     private readonly IConfiguration _configuration;
     private readonly IFileStorage _fileStorage;
-    private readonly string _container;
 
     public AccountsController(IUsersUnitOfWork usersUnitOfWork, IConfiguration configuration, IFileStorage fileStorage)
     {
         _usersUnitOfWork = usersUnitOfWork;
         _configuration = configuration;
         _fileStorage = fileStorage;
-        _container = "users";
     }
 
     [HttpPost("CreateUser")]
@@ -36,7 +34,7 @@ public class AccountsController : ControllerBase
         if (!string.IsNullOrEmpty(model.Photo))
         {
             var photoUser = Convert.FromBase64String(model.Photo);
-            model.Photo = await _fileStorage.SaveFileAsync(photoUser, ".jpg", _container);
+            model.Photo = await _fileStorage.SaveFileAsync(photoUser, ".jpg");
         }
 
         var result = await _usersUnitOfWork.AddUserAsync(user, model.Password);
