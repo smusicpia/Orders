@@ -159,31 +159,36 @@ public partial class Register
 
     private async Task CreateUserAsync()
     {
-        if (userDTO.Email is null || userDTO.PhoneNumber is null)
-        {
-            InvalidForm();
-            return;
-        }
+        //if (userDTO.Email is null || userDTO.PhoneNumber is null)
+        //{
+        //    InvalidForm();
+        //    return;
+        //}
 
-        userDTO.UserType = UserType.User;
-        userDTO.UserName = userDTO.Email;
+        //userDTO.UserType = UserType.User;
+        //userDTO.UserName = userDTO.Email;
 
-        if (IsAdmin)
-        {
-            userDTO.UserType = UserType.Admin;
-        }
+        //if (IsAdmin)
+        //{
+        //    userDTO.UserType = UserType.Admin;
+        //}
 
         loading = true;
-        var responseHttp = await Repository.PostAsync<UserDTO, TokenDTO>("/api/accounts/CreateUser", userDTO);
+        userDTO.UserType = UserType.User;
+        userDTO.UserName = userDTO.Email;
+        //var responseHttp = await Repository.PostAsync<UserDTO, TokenDTO>("/api/accounts/CreateUser", userDTO);
+        var responseHttp = await Repository.PostAsync<UserDTO>("/api/accounts/CreateUser", userDTO);
         loading = false;
         if (responseHttp.Error)
         {
             var message = await responseHttp.GetErrorMessageAsync();
             Snackbar.Add(message!, Severity.Error);
+            //await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }
 
-        await LoginService.LoginAsync(responseHttp.Response!.Token);
+        Snackbar.Add("Su cuenta ha sido creada con éxito. Se te ha enviado un correo electrónico con las instrucciones para activar tu usuario.", Severity.Info);
+        //await SweetAlertService.FireAsync("Confirmación", "Su cuenta ha sido creada con éxito. Se te ha enviado un correo electrónico con las instrucciones para activar tu usuario.", SweetAlertIcon.Info);
         NavigationManager.NavigateTo("/");
     }
 }
