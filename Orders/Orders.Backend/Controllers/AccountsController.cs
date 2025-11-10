@@ -109,6 +109,29 @@ public class AccountsController : ControllerBase
         return Ok(await _usersUnitOfWork.GetUserAsync(User.Identity!.Name!));
     }
 
+    [HttpPost("changePassword")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> ChangePasswordAsync(ChangePasswordDTO model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var user = await _usersUnitOfWork.GetUserAsync(User.Identity!.Name!);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var result = await _usersUnitOfWork.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors.FirstOrDefault()!.Description);
+        }
+
+        return NoContent();
+    }
 
     private TokenDTO BuildToken(User user)
     {
